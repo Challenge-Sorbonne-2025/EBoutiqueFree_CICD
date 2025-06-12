@@ -54,13 +54,17 @@ pipeline {
             }
         }
 
-
-        stage('🐳 Build Frontend Docker Image') {
+        stage('🐳 Build frontend Docker Image') {
             steps {
                 dir("${FRONTEND_DIR}") {
                     sh """
-                        docker build -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG} .
-                        docker tag ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG} ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-latest
+                        docker buildx create --use || true
+                        docker buildx build \
+                            --platform linux/amd64,linux/arm64 \
+                            -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG} \
+                            -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-latest \
+                            --load \
+                            .
                     """
                 }
             }
