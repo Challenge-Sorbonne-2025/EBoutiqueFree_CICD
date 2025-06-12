@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         IMAGE_TAG = "${BUILD_NUMBER}"
-        DOCKERHUB_CREDENTIALS_ID = 'DOCKERHUB_CREDENTIALS'  // ID Jenkins des credentials DockerHub
+        DOCKERHUB_CREDENTIALS_ID = 'DOCKER_HUB_CREDENTIALS'  // ID Jenkins des credentials DockerHub
         DOCKERHUB_USERNAME = 'senfidel'       // <-- mon DockerHub username
     }
 
