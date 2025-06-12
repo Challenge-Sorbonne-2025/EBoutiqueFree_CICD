@@ -40,8 +40,8 @@ pipeline {
             steps {
                 dir('backend') {
                     sh """
-                        docker build -t ${DOCKERHUB_USERNAME}/eboutique:backend-${IMAGE_TAG} .
-                        docker tag ${DOCKERHUB_USERNAME}/eboutique:backend-${IMAGE_TAG} ${DOCKERHUB_USERNAME}/eboutique:backend-latest
+                        docker build -t ${DOCKERHUB_USERNAME}/projetsvde:backend-${IMAGE_TAG} .
+                        docker tag ${DOCKERHUB_USERNAME}/projetsvde:backend-${IMAGE_TAG} ${DOCKERHUB_USERNAME}/eboutique:backend-latest
                     """
                 }
             }
@@ -51,8 +51,8 @@ pipeline {
             steps {
                 dir('frontend') {
                     sh """
-                        docker build -t ${DOCKERHUB_USERNAME}/eboutique:frontend-${IMAGE_TAG} .
-                        docker tag ${DOCKERHUB_USERNAME}/eboutique:frontend-${IMAGE_TAG} ${DOCKERHUB_USERNAME}/eboutique:frontend-latest
+                        docker build -t ${DOCKERHUB_USERNAME}/projetsvde:frontend-${IMAGE_TAG} .
+                        docker tag ${DOCKERHUB_USERNAME}/projetsvde:frontend-${IMAGE_TAG} ${DOCKERHUB_USERNAME}/eboutique:frontend-latest
                     """
                 }
             }
