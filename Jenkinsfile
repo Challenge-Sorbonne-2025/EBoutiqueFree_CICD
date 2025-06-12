@@ -40,10 +40,14 @@ pipeline {
 
         stage('🐳 Build Backend Docker Image') {
             steps {
-                dir("${BACKEND_DIR}") {
+                dir('backendboutique') {
                     sh """
-                        docker build -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-${IMAGE_TAG} .
-                        docker tag ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-${IMAGE_TAG} ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-latest
+                        docker buildx create --use || true
+                        docker buildx build \
+                            --platform linux/amd64,linux/arm64 \
+                            -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-${IMAGE_TAG} \
+                            -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-latest \
+                            --push .
                     """
                 }
             }
@@ -60,22 +64,21 @@ pipeline {
             }
         }
 
-        stage('📤 Push Docker Images to DockerHub') {
+        stage('🐳 Build Frontend Docker Image') {
             steps {
-                withCredentials([usernamePassword(credentialsId: "${DOCKERHUB_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                dir("${FRONTEND_DIR}") {
                     sh """
-                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-
-                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-${IMAGE_TAG}
-                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-latest
-
-                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG}
-                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-latest
+                        docker buildx create --use || true
+                        docker buildx build \
+                            --platform linux/amd64,linux/arm64 \
+                            -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG} \
+                            -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-latest \
+                            --push .
                     """
                 }
             }
         }
-    }
+
 
     post {
         always {
