@@ -21,7 +21,7 @@ docker pull senfidel/projetsvde:frontendboutique-latest
 docker pull senfidel/projetsvde:backendboutique-latest
 
 docker run -d -p 2000:80 --name frontend senfidel/projetsvde:frontendboutique-latest
-docker run -d -p 9000:9000 --name backend csenfidel/projetsvde:backendboutique-latest
+docker run -d -p 9000:9000 --name backend senfidel/projetsvde:backendboutique-latest
 ```
 
 ---
