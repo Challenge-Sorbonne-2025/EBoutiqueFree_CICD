@@ -1,17 +1,20 @@
+def BACKEND_DIR = 'backendboutique'
+def FRONTEND_DIR = 'frontend'
+
 pipeline {
     agent any
 
     environment {
         IMAGE_TAG = "${BUILD_NUMBER}"
-        DOCKERHUB_CREDENTIALS_ID = 'DOCKER_HUB_CREDENTIALS' // L'id du credaential sur jenkins
-        DOCKERHUB_USERNAME = 'senfidel' // Mon username sur dockerhub
-        DOCKERHUB_REPO = 'projetsvde' // Mon repo dockerhub
+        DOCKERHUB_CREDENTIALS_ID = 'DOCKER_HUB_CREDENTIALS' // id de mes credentials dockerhub
+        DOCKERHUB_USERNAME = 'senfidel' // Mon User dockerhub
+        DOCKERHUB_REPO = 'projetsvde' //Mon repo dockerhub
     }
 
     stages {
         stage('📥 Clone Backend') {
             steps {
-                dir('backendboutique') {
+                dir("${BACKEND_DIR}") {
                     git url: 'https://github.com/Challenge-Sorbonne-2025/EBoutiqueFree_Backend.git', branch: 'dev'
                 }
             }
@@ -19,7 +22,7 @@ pipeline {
 
         stage('📥 Clone Frontend') {
             steps {
-                dir('frontend') {
+                dir("${FRONTEND_DIR}") {
                     git url: 'https://github.com/Challenge-Sorbonne-2025/EBoutiqueFree_Frontend.git', branch: 'dev'
                 }
             }
@@ -27,11 +30,9 @@ pipeline {
 
         stage('📎 Inject .env Backend') {
             steps {
-                dir('backendboutique') {
+                dir("${BACKEND_DIR}") {
                     withCredentials([file(credentialsId: 'EBOUTIQUE_BACKEND_ENV', variable: 'DOTENV_FILE')]) {
-                        sh '''
-                            cp $DOTENV_FILE .env
-                        '''
+                        sh 'cp $DOTENV_FILE .env'
                     }
                 }
             }
@@ -39,7 +40,7 @@ pipeline {
 
         stage('🐳 Build Backend Docker Image') {
             steps {
-                dir('backendboutique') {
+                dir("${BACKEND_DIR}") {
                     sh """
                         docker build -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-${IMAGE_TAG} .
                         docker tag ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-${IMAGE_TAG} ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-latest
@@ -50,7 +51,7 @@ pipeline {
 
         stage('🐳 Build Frontend Docker Image') {
             steps {
-                dir('frontendboutique') {
+                dir("${FRONTEND_DIR}") {
                     sh """
                         docker build -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG} .
                         docker tag ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG} ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-latest
