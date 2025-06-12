@@ -42,7 +42,7 @@ pipeline {
                 dir('backendboutique') {
                     sh """
                         docker build -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique:${IMAGE_TAG} .
-                        docker tag ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique:-${IMAGE_TAG} ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique:latest
+                        docker tag ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique:${IMAGE_TAG} ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique:latest
                     """
                 }
             }
