@@ -41,8 +41,8 @@ pipeline {
             steps {
                 dir('backendboutique') {
                     sh """
-                        docker build -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique:${IMAGE_TAG} .
-                        docker tag ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique:${IMAGE_TAG} ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique:latest
+                        docker build -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-${IMAGE_TAG} .
+                        docker tag ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-${IMAGE_TAG} ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-latest
                     """
                 }
             }
@@ -52,8 +52,8 @@ pipeline {
             steps {
                 dir('frontendboutique') {
                     sh """
-                        docker build -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique:${IMAGE_TAG} .
-                        docker tag ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique:${IMAGE_TAG} ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique:latest
+                        docker build -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG} .
+                        docker tag ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG} ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-latest
                     """
                 }
             }
@@ -65,11 +65,11 @@ pipeline {
                     sh """
                         echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
 
-                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique:${IMAGE_TAG}
-                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique:latest
+                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-${IMAGE_TAG}
+                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-latest
 
-                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique:${IMAGE_TAG}
-                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique:latest
+                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG}
+                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-latest
                     """
                 }
             }
