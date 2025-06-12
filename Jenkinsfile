@@ -40,7 +40,7 @@ pipeline {
 
         stage('🐳 Build Backend Docker Image') {
             steps {
-                dir('backendboutique') {
+                dir("${BACKEND_DIR}") {
                     sh """
                         docker buildx create --use || true
                         docker buildx build \
@@ -48,17 +48,6 @@ pipeline {
                             -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-${IMAGE_TAG} \
                             -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-latest \
                             --push .
-                    """
-                }
-            }
-        }
-
-        stage('🐳 Build Frontend Docker Image') {
-            steps {
-                dir("${FRONTEND_DIR}") {
-                    sh """
-                        docker build -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG} .
-                        docker tag ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG} ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-latest
                     """
                 }
             }
@@ -78,7 +67,7 @@ pipeline {
                 }
             }
         }
-
+    }
 
     post {
         always {
