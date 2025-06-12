@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('📥 Clone Backend') {
             steps {
-                dir('backend') {
+                dir('backendboutique') {
                     git url: 'https://github.com/Challenge-Sorbonne-2025/EBoutiqueFree_Backend.git', branch: 'dev'
                 }
             }
@@ -27,7 +27,7 @@ pipeline {
 
         stage('📎 Inject .env Backend') {
             steps {
-                dir('backend') {
+                dir('backendboutique') {
                     withCredentials([file(credentialsId: 'EBOUTIQUE_BACKEND_ENV', variable: 'DOTENV_FILE')]) {
                         sh '''
                             cp $DOTENV_FILE .env
@@ -39,10 +39,10 @@ pipeline {
 
         stage('🐳 Build Backend Docker Image') {
             steps {
-                dir('backend') {
+                dir('backendboutique') {
                     sh """
-                        docker build -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backend-${IMAGE_TAG} .
-                        docker tag ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backend-${IMAGE_TAG} ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backend-latest
+                        docker build -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique:${IMAGE_TAG} .
+                        docker tag ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique:-${IMAGE_TAG} ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique:latest
                     """
                 }
             }
@@ -50,10 +50,10 @@ pipeline {
 
         stage('🐳 Build Frontend Docker Image') {
             steps {
-                dir('frontend') {
+                dir('frontendboutique') {
                     sh """
-                        docker build -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontend-${IMAGE_TAG} .
-                        docker tag ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontend-${IMAGE_TAG} ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontend-latest
+                        docker build -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique:${IMAGE_TAG} .
+                        docker tag ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique:${IMAGE_TAG} ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique:latest
                     """
                 }
             }
@@ -65,11 +65,11 @@ pipeline {
                     sh """
                         echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
 
-                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backend-${IMAGE_TAG}
-                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backend-latest
+                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique:${IMAGE_TAG}
+                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique:latest
 
-                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontend-${IMAGE_TAG}
-                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontend-latest
+                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique:${IMAGE_TAG}
+                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique:latest
                     """
                 }
             }
