@@ -14,7 +14,9 @@ Ce repository contient :
 - ✅ Un Jenkinsfile global qui déclenche le build des deux projets.
 - ✅ Un `docker-compose.yml` global pour lancer l’ensemble des services en local ou en production.
 - ✅ Les configurations nécessaires à Jenkins pour l’intégration continue.
-- Exemple de `docker run -d -p 5173:80 --name nom_container id_image`
+- Exemple de lignes pour faire démarrer les containers apres exécution du pipeline Jenkins:
+  `docker run -d -p 2000:80 --name frontend cicdfreeshop-frontend:latest
+  docker run -d -p 9000:9000 --name backend cicdfreeshop-backend:latest`
 
 ---
 
