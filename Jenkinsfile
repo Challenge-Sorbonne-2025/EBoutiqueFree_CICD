@@ -1,14 +1,14 @@
 def BACKEND_DIR = 'backendboutique'
-def FRONTEND_DIR = 'frontend'
+def FRONTEND_DIR = 'frontendboutique'
 
 pipeline {
     agent any
 
     environment {
         IMAGE_TAG = "${BUILD_NUMBER}"
-        DOCKERHUB_CREDENTIALS_ID = 'DOCKER_HUB_CREDENTIALS' // id de mes credentials dockerhub
-        DOCKERHUB_USERNAME = 'senfidel' // Mon User dockerhub
-        DOCKERHUB_REPO = 'projetsvde' //Mon repo dockerhub
+        DOCKERHUB_CREDENTIALS_ID = 'DOCKER_HUB_CREDENTIALS'
+        DOCKERHUB_USERNAME = 'senfidel'
+        DOCKERHUB_REPO = 'projetsvde'
     }
 
     stages {
@@ -42,12 +42,8 @@ pipeline {
             steps {
                 dir("${BACKEND_DIR}") {
                     sh """
-                        docker buildx create --use || true
-                        docker buildx build \
-                            --platform linux/amd64,linux/arm64 \
-                            -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-${IMAGE_TAG} \
-                            -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-latest \
-                            --push .
+                        docker build -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-${IMAGE_TAG} .
+                        docker tag ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-${IMAGE_TAG} ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-latest
                     """
                 }
             }
@@ -57,12 +53,24 @@ pipeline {
             steps {
                 dir("${FRONTEND_DIR}") {
                     sh """
-                        docker buildx create --use || true
-                        docker buildx build \
-                            --platform linux/amd64,linux/arm64 \
-                            -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG} \
-                            -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-latest \
-                            --push .
+                        docker build -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG} .
+                        docker tag ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG} ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-latest
+                    """
+                }
+            }
+        }
+
+        stage('📤 Push Docker Images to DockerHub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: "${DOCKERHUB_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh """
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+
+                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-${IMAGE_TAG}
+                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-latest
+
+                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG}
+                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-latest
                     """
                 }
             }
