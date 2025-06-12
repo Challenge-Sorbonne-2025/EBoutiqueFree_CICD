@@ -3,6 +3,8 @@ pipeline {
 
     environment {
         IMAGE_TAG = "${BUILD_NUMBER}"
+        DOCKERHUB_CREDENTIALS_ID = 'DOCKERHUB_CREDENTIALS'  // ID Jenkins des credentials DockerHub
+        DOCKERHUB_USERNAME = 'senfidel'       // <-- mon DockerHub username
     }
 
     stages {
@@ -22,7 +24,7 @@ pipeline {
             }
         }
 
-        stage('📎 Inject .env') {
+        stage('📎 Inject .env Backend') {
             steps {
                 dir('backend') {
                     withCredentials([file(credentialsId: 'EBOUTIQUE_BACKEND_ENV', variable: 'DOTENV_FILE')]) {
@@ -34,21 +36,50 @@ pipeline {
             }
         }
 
-        stage('🐳 Build & Run Full Stack') {
+        stage('🐳 Build Backend Docker Image') {
             steps {
-                sh '''
-                    docker-compose down || true
-                    docker-compose build
-                    docker-compose up -d
-                '''
+                dir('backend') {
+                    sh """
+                        docker build -t ${DOCKERHUB_USERNAME}/eboutique:backend-${IMAGE_TAG} .
+                        docker tag ${DOCKERHUB_USERNAME}/eboutique:backend-${IMAGE_TAG} ${DOCKERHUB_USERNAME}/eboutique:backend-latest
+                    """
+                }
             }
         }
+
+        stage('🐳 Build Frontend Docker Image') {
+            steps {
+                dir('frontend') {
+                    sh """
+                        docker build -t ${DOCKERHUB_USERNAME}/eboutique:frontend-${IMAGE_TAG} .
+                        docker tag ${DOCKERHUB_USERNAME}/eboutique:frontend-${IMAGE_TAG} ${DOCKERHUB_USERNAME}/eboutique:frontend-latest
+                    """
+                }
+            }
+        }
+
+        stage('📤 Push Docker Images to DockerHub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: "${DOCKERHUB_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh '''
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+
+                        docker push ${DOCKERHUB_USERNAME}/projetsvde:backend-${IMAGE_TAG}
+                        docker push ${DOCKERHUB_USERNAME}/projetsvde:backend-latest
+
+                        docker push ${DOCKERHUB_USERNAME}/projetsvde:frontend-${IMAGE_TAG}
+                        docker push ${DOCKERHUB_USERNAME}/projetsvde:frontend-latest
+                    '''
+                }
+            }
+        }
+
     }
 
     post {
         always {
             echo '🧹 Nettoyage...'
-            sh 'docker-compose down || true'
+            sh 'docker system prune -f || true'
             cleanWs()
         }
     }
