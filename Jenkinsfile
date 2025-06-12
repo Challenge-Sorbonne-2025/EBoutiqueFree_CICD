@@ -3,8 +3,9 @@ pipeline {
 
     environment {
         IMAGE_TAG = "${BUILD_NUMBER}"
-        DOCKERHUB_CREDENTIALS_ID = 'DOCKER_HUB_CREDENTIALS'  // ID Jenkins des credentials DockerHub
-        DOCKERHUB_USERNAME = 'senfidel'       // <-- mon DockerHub username
+        DOCKERHUB_CREDENTIALS_ID = 'DOCKER_HUB_CREDENTIALS' // L'id du credaential sur jenkins
+        DOCKERHUB_USERNAME = 'senfidel' // Mon username sur dockerhub
+        DOCKERHUB_REPO = 'projetsvde' // Mon repo dockerhub
     }
 
     stages {
@@ -40,8 +41,8 @@ pipeline {
             steps {
                 dir('backend') {
                     sh """
-                        docker build -t ${DOCKERHUB_USERNAME}/projetsvde:backend-${IMAGE_TAG} .
-                        docker tag ${DOCKERHUB_USERNAME}/projetsvde:backend-${IMAGE_TAG} ${DOCKERHUB_USERNAME}/eboutique:backend-latest
+                        docker build -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backend-${IMAGE_TAG} .
+                        docker tag ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backend-${IMAGE_TAG} ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backend-latest
                     """
                 }
             }
@@ -51,8 +52,8 @@ pipeline {
             steps {
                 dir('frontend') {
                     sh """
-                        docker build -t ${DOCKERHUB_USERNAME}/projetsvde:frontend-${IMAGE_TAG} .
-                        docker tag ${DOCKERHUB_USERNAME}/projetsvde:frontend-${IMAGE_TAG} ${DOCKERHUB_USERNAME}/eboutique:frontend-latest
+                        docker build -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontend-${IMAGE_TAG} .
+                        docker tag ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontend-${IMAGE_TAG} ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontend-latest
                     """
                 }
             }
@@ -61,19 +62,18 @@ pipeline {
         stage('📤 Push Docker Images to DockerHub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: "${DOCKERHUB_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    sh '''
+                    sh """
                         echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
 
-                        docker push ${DOCKERHUB_USERNAME}/projetsvde:backend-${IMAGE_TAG}
-                        docker push ${DOCKERHUB_USERNAME}/projetsvde:backend-latest
+                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backend-${IMAGE_TAG}
+                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backend-latest
 
-                        docker push ${DOCKERHUB_USERNAME}/projetsvde:frontend-${IMAGE_TAG}
-                        docker push ${DOCKERHUB_USERNAME}/projetsvde:frontend-latest
-                    '''
+                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontend-${IMAGE_TAG}
+                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontend-latest
+                    """
                 }
             }
         }
-
     }
 
     post {
