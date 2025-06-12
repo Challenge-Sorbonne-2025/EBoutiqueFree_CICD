@@ -47,14 +47,14 @@ pipeline {
                             --platform linux/amd64,linux/arm64 \
                             -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-${IMAGE_TAG} \
                             -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-latest \
-                            --load \
+                            --output type=docker \
                             .
                     """
                 }
             }
         }
 
-        stage('🐳 Build frontend Docker Image') {
+        stage('🐳 Build Frontend Docker Image') {
             steps {
                 dir("${FRONTEND_DIR}") {
                     sh """
@@ -63,7 +63,7 @@ pipeline {
                             --platform linux/amd64,linux/arm64 \
                             -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG} \
                             -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-latest \
-                            --load \
+                            --output type=docker \
                             .
                     """
                 }
