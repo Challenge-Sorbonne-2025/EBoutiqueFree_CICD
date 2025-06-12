@@ -23,11 +23,11 @@ docker run -d -p 9000:9000 --name backend cicdfreeshop-backend:latest
 
 ---
 
-## 🗺️ Structure
+## 🗺️ Structure du projet CICD
 
 ```bash
 EBoutiqueFree_CICD/
 │
 ├── Jenkinsfile           # Pipeline Jenkins complet
-├── docker-compose.yml    # Docker Compose global
-└── README.md             # Ce fichier
+├── docker-compose.yml    # Docker Compose du front & du du back
+└── README.md             
