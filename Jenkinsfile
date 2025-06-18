@@ -7,8 +7,8 @@ pipeline {
     environment {
         IMAGE_TAG = "${BUILD_NUMBER}"
         DOCKERHUB_CREDENTIALS_ID = 'DOCKER_HUB_CREDENTIALS'
-        DOCKERHUB_USERNAME = 'senfidel'
-        DOCKERHUB_REPO = 'projetsvde'
+        DOCKERHUB_USERNAME = 'abibatou'
+        DOCKERHUB_REPO = 'eboutique_free'
     }
 
     stages {
