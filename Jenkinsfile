@@ -40,8 +40,8 @@ pipeline {
             steps {
                 sh """
                     docker-compose down || true
-                    docker-compose --env-file ${BACKEND_DIR}/.env build
-                    docker-compose --env-file ${BACKEND_DIR}/.env up -d
+                    docker-compose build
+                    docker-compose up -d
                 """
             }
         }
