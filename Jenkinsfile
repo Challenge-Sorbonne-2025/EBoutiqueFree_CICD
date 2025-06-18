@@ -43,8 +43,8 @@ pipeline {
             steps {
                 sh '''
                     docker-compose down || true
-                    docker-compose build
-                    docker-compose up -d
+                    docker-compose --env-file .env build
+                    docker-compose --env-file .env up -d
                 '''
             }
         }
