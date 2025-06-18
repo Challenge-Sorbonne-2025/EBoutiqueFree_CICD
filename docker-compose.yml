@@ -19,7 +19,7 @@ services:
     build:
       context: ./backend
     container_name: ecommerce_backend
-    env_file: ./backend/.env
+    env_file: ./backendboutique/.env
     depends_on:
       - db
     ports:
