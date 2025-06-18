@@ -67,15 +67,15 @@ pipeline {
         stage('📤 Push Docker Images to DockerHub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: "${DOCKERHUB_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    sh """
-                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-
+                    sh '''#!/bin/bash
+                        mkdir -p /tmp/.docker                    
+                        echo "$DOCKER_PASS" | docker --config /tmp/.docker login -u "$DOCKER_USER" --password-stdin
                         docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-${IMAGE_TAG}
                         docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-latest
 
                         docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG}
                         docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-latest
-                    """
+                    '''
                 }
             }
         }
