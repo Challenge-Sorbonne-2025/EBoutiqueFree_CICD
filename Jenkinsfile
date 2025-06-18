@@ -30,23 +30,21 @@ pipeline {
 
         stage('📎 Inject .env Backend') {
             steps {
-                dir("${BACKEND_DIR}") {
-                    withCredentials([file(credentialsId: 'EBOUTIQUE_BACKEND_ENV', variable: 'DOTENV_FILE')]) {
-                        sh 'cp $DOTENV_FILE $BACKEND_DIR/.env'
-                    }
+                withCredentials([file(credentialsId: 'EBOUTIQUE_BACKEND_ENV', variable: 'DOTENV_FILE')]) {
+                    sh "cp \$DOTENV_FILE ${BACKEND_DIR}/.env"
                 }
             }
         }
+
         stage('🐳 Docker Compose Build & Run (Tests Locaux)') {
             steps {
-                sh '''
+                sh """
                     docker-compose down || true
-                    docker-compose --env-file .env build
-                    docker-compose --env-file .env up -d
-                '''
+                    docker-compose --env-file ${BACKEND_DIR}/.env build
+                    docker-compose --env-file ${BACKEND_DIR}/.env up -d
+                """
             }
         }
-
 
         stage('📤 Push Docker Images to DockerHub') {
             steps {
