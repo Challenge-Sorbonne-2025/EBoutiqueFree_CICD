@@ -33,6 +33,7 @@ pipeline {
                 dir("${BACKEND_DIR}") {
                     withCredentials([file(credentialsId: 'EBOUTIQUE_BACKEND_ENV', variable: 'DOTENV_FILE')]) {
                         sh 'cp $DOTENV_FILE .env'
+                        sh echo 'cat .env'
                     }
                 }
             }
