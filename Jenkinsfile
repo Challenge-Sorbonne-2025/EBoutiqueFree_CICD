@@ -32,7 +32,7 @@ pipeline {
             steps {
                 dir("${BACKEND_DIR}") {
                     withCredentials([file(credentialsId: 'EBOUTIQUE_BACKEND_ENV', variable: 'DOTENV_FILE')]) {
-                        sh 'cp $DOTENV_FILE ./backendboutique/.env'
+                        sh 'cp $DOTENV_FILE $BACKEND_DIR/.env'
                     }
                 }
             }
