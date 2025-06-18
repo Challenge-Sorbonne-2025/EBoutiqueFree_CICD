@@ -70,11 +70,11 @@ pipeline {
                     sh '''#!/bin/bash
                         mkdir -p /tmp/.docker                    
                         echo "$DOCKER_PASS" | docker --config /tmp/.docker login -u "$DOCKER_USER" --password-stdin
-                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-${IMAGE_TAG}
-                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-latest
+                        docker image push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-${IMAGE_TAG}
+                        docker image push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-latest
 
-                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG}
-                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-latest
+                        docker image push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG}
+                        docker image push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-latest
                     '''
                 }
             }
