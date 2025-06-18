@@ -41,13 +41,10 @@ pipeline {
         stage('🐳 Build Backend Docker Image') {
             steps {
                 dir("${BACKEND_DIR}") {
-                    sh """
-                        docker buildx create --use || true
-                        docker buildx build \
-                            --platform linux/amd64,linux/arm64 \
+                    sh """                        
+                        docker build \
                             -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-${IMAGE_TAG} \
                             -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-latest \
-                            --output type=docker \
                             .
                     """
                 }
