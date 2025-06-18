@@ -5,7 +5,11 @@ pipeline {
     agent any
 
     environment {
-        COMPOSE_PROJECT_NAME = "eboutique"  // nom unique de projet compose
+        IMAGE_TAG = "${BUILD_NUMBER}"
+        DOCKERHUB_USERNAME = 'senfidel'
+        DOCKERHUB_REPO = 'projetsvde'
+        DOCKERHUB_CREDENTIALS_ID = 'DOCKER_HUB_CREDENTIALS'
+        COMPOSE_PROJECT_NAME = "eboutique"
     }
 
     stages {
@@ -35,13 +39,43 @@ pipeline {
             }
         }
 
-        stage('🐳 Docker Compose Up') {
+        stage('🐳 Docker Compose Build & Run (Tests Locaux)') {
             steps {
                 sh '''
                     docker-compose down || true
                     docker-compose build
                     docker-compose up -d
                 '''
+            }
+        }
+
+        stage('📤 Push vers DockerHub') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: "${DOCKERHUB_CREDENTIALS_ID}",
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS')]) {
+
+                    sh '''
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+
+                        # Tag backend
+                        docker tag ecommerce_backend ${DOCKER_USER}/${DOCKERHUB_REPO}:backendboutique-${IMAGE_TAG}
+                        docker tag ecommerce_backend ${DOCKER_USER}/${DOCKERHUB_REPO}:backendboutique-latest
+
+                        # Tag frontend
+                        docker tag ecommerce_frontend ${DOCKER_USER}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG}
+                        docker tag ecommerce_frontend ${DOCKER_USER}/${DOCKERHUB_REPO}:frontendboutique-latest
+
+                        # Push backend
+                        docker push ${DOCKER_USER}/${DOCKERHUB_REPO}:backendboutique-${IMAGE_TAG}
+                        docker push ${DOCKER_USER}/${DOCKERHUB_REPO}:backendboutique-latest
+
+                        # Push frontend
+                        docker push ${DOCKER_USER}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG}
+                        docker push ${DOCKER_USER}/${DOCKERHUB_REPO}:frontendboutique-latest
+                    '''
+                }
             }
         }
     }
@@ -51,7 +85,7 @@ pipeline {
             echo '🧹 Nettoyage...'
             sh '''
                 docker-compose down || true
-                docker system prune -f || true
+                docker system prune -f -a --volumes || true
             '''
             cleanWs()
         }
