@@ -57,13 +57,10 @@ pipeline {
         stage('🐳 Build Frontend Docker Image') {
             steps {
                 dir("${FRONTEND_DIR}") {
-                    sh """
-                        docker buildx create --use || true
-                        docker buildx build \
-                            --platform linux/amd64,linux/arm64 \
+                    sh """                        
+                        docker  build \                           
                             -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG} \
                             -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-latest \
-                            --output type=docker \
                             .
                     """
                 }
