@@ -17,7 +17,7 @@ services:
 
   backend:
     build:
-      context: ./backend
+      context: ./backendboutique
     container_name: ecommerce_backend
     env_file: ./backendboutique/.env
     
@@ -29,10 +29,10 @@ services:
 
   frontend:
     build:
-      context: ./frontend
+      context: ./frontendboutique
     container_name: ecommerce_frontend
     depends_on:
-      - backend
+      - backendboutique
     ports:
       - "3000:80"
 
