@@ -14,6 +14,25 @@ Ce repository contient :
 - ✅ Un Jenkinsfile global qui déclenche le build des deux projets.
 - ✅ Un `docker-compose.yml` global pour lancer l’ensemble des services en local ou en production.
 - ✅ Les configurations nécessaires à Jenkins pour l’intégration continue.
+
+
+---
+
+## 🚀 Fonctionnement du Pipeline
+
+### 🔁 Étapes automatisées par Jenkins :
+
+1. **Clonage des dépôts**
+2. **Injection sécurisée du fichier `.env` backend**
+3. **Construction des images Docker avec Docker Compose**
+4. **Tagging :**
+   - `backendboutique-latest`, `backendboutique-<build number>`
+   - `frontendboutique-latest`, `frontendboutique-<build number>`
+5. **Push des images sur DockerHub**
+6. **déploiement sur Google Kubernetes Engine
+
+---
+
 ---
   *Guide pour le pull et le run des images:*
   ```bash
