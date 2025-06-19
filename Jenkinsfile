@@ -42,6 +42,8 @@ pipeline {
                     export DOCKERHUB_USERNAME=${DOCKERHUB_USERNAME}
                     export DOCKERHUB_REPO=${DOCKERHUB_REPO}
                     export IMAGE_TAG=${IMAGE_TAG}
+                    export BACKEND_DIR=${BACKEND_DIR}
+                    export FRONTEND_DIR=${BACKEND_DIR}
                     
                   # Build e l'image  
                     docker-compose down || true
