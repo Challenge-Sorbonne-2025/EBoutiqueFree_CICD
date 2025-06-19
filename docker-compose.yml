@@ -19,7 +19,7 @@ services:
     build:
       context: ./backendboutique
     container_name: ecommerce_backend
-    env_file: ./backendboutique/.env
+    env_file: ./backendboutique/EBoutique_API/.env
     
     depends_on:
       - db
