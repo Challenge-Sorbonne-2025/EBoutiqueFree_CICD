@@ -58,12 +58,17 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: "${DOCKERHUB_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh """
                         echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-
-                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:${BACKEND_DIR}-${IMAGE_TAG}
+                        
+                        # Re-tag backend latest -> backend-${IMAGE_TAG}
+                        docker tag ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:${BACKEND_DIR}-latest ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:${BACKEND_DIR}-${IMAGE_TAG}
                         docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:${BACKEND_DIR}-latest
-
-                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:${FRONTEND_DIR}-${IMAGE_TAG}
+                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:${BACKEND_DIR}-${IMAGE_TAG}
+        
+                        # Re-tag frontend latest -> frontend-${IMAGE_TAG}
+                        docker tag ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:${FRONTEND_DIR}-latest ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:${FRONTEND_DIR}-${IMAGE_TAG}
                         docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:${FRONTEND_DIR}-latest
+                        docker push ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:${FRONTEND_DIR}-${IMAGE_TAG}
+
                     """
                 }
             }
