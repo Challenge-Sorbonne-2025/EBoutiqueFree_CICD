@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: docker.io/senfidel/projetsvde:backendboutique-latest
+          ports:
+            - containerPort: 9000
+          env:
+            - name: DB_NAME
+              value: "ecommerce"
+            - name: DB_USER
+              value: "admin"
+            - name: DB_PASSWORD
+              value: "adminpass"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 9000
+      targetPort: 9000
+  type: LoadBalancer
