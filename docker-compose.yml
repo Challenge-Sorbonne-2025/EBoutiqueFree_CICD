@@ -16,7 +16,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   backend:
-    image: ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:${BACKEND_DIR}-latest
+    image: senfidel/projetsvde:backendboutique-${IMAGE_TAG}
     build:
       context: ./${BACKEND_DIR}
     container_name: ecommerce_backend
@@ -29,7 +29,7 @@ services:
     command: ./entrypoint.sh
 
   frontend:
-    image: ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:${FRONTEND_DIR}-$latest
+    image: senfidel/projetsvde:frontendboutique-${IMAGE_TAG}
     build:
       context: ./${FRONTEND_DIR}
     container_name: ecommerce_frontend
