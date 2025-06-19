@@ -16,7 +16,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   backend:
-    image: senfidel/projetsvde:backendboutique-${IMAGE_TAG}
+    image: senfidel/projetsvde:backendboutique-latest
     build:
       context: ./${BACKEND_DIR}
     container_name: ecommerce_backend
@@ -29,7 +29,7 @@ services:
     command: ./entrypoint.sh
 
   frontend:
-    image: senfidel/projetsvde:frontendboutique-${IMAGE_TAG}
+    image: senfidel/projetsvde:frontendboutique-latest
     build:
       context: ./${FRONTEND_DIR}
     container_name: ecommerce_frontend
