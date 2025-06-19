@@ -16,6 +16,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   backend:
+    image: ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-${IMAGE_TAG}
     build:
       context: ./backendboutique
     container_name: ecommerce_backend
@@ -28,6 +29,7 @@ services:
     command: ./entrypoint.sh
 
   frontend:
+    image: ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG}
     build:
       context: ./frontendboutique
     container_name: ecommerce_frontend
