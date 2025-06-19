@@ -16,9 +16,9 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   backend:
-    image: ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-${IMAGE_TAG}
+    image: ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:${BACKEND_DIR}-${IMAGE_TAG}
     build:
-      context: ./backendboutique
+      context: ./${BACKEND_DIR}
     container_name: ecommerce_backend
     env_file: ./backendboutique/EBoutique_API/.env
     
@@ -29,9 +29,9 @@ services:
     command: ./entrypoint.sh
 
   frontend:
-    image: ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG}
+    image: ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:${FRONTEND_DIR}-${IMAGE_TAG}
     build:
-      context: ./frontendboutique
+      context: ./${FRONTEND_DIR}
     container_name: ecommerce_frontend
     depends_on:
       - backend
