@@ -31,7 +31,7 @@ pipeline {
         stage('📎 Inject .env Backend') {
             steps {
                 withCredentials([file(credentialsId: 'EBOUTIQUE_BACKEND_ENV', variable: 'DOTENV_FILE')]) {
-                    sh "cp \$DOTENV_FILE ${BACKEND_DIR}/.env"
+                    sh "cp \$DOTENV_FILE ${BACKEND_DIR}/EBoutique_API/.env"
                 }
             }
         }
