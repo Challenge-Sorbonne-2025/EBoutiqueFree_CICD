@@ -39,6 +39,12 @@ pipeline {
         stage('🐳 Docker Compose Build & Run (Tests Locaux)') {
             steps {
                 sh """
+                # Exportation des variables vers le dockercompose 
+                    export DOCKERHUB_USERNAME=${DOCKERHUB_USERNAME}
+                    export DOCKERHUB_REPO=${DOCKERHUB_REPO}
+                    export IMAGE_TAG=${IMAGE_TAG}
+                    
+                  # Build e l'image  
                     docker-compose down || true
                     docker-compose build
                     docker-compose up -d
