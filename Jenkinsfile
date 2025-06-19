@@ -45,7 +45,7 @@ pipeline {
                     export BACKEND_DIR=${BACKEND_DIR}
                     export FRONTEND_DIR=${BACKEND_DIR}
                     
-                  # Build e l'image  
+ 
                     docker-compose down || true
                     docker-compose build
                     docker-compose up -d
