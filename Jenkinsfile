@@ -40,12 +40,13 @@ pipeline {
 
         stage('🐳 Build Backend Docker Image') {
             steps {
-                dir("${BACKEND_DIR}") {
-                    sh """                        
+                script {
+                    def backendPath = "${env.WORKSPACE}/${BACKEND_DIR}"
+                    sh """
                         docker build \
                             -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-${IMAGE_TAG} \
                             -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-latest \
-                            .
+                            ${backendPath}
                     """
                 }
             }
@@ -53,13 +54,14 @@ pipeline {
 
         stage('🐳 Build Frontend Docker Image') {
             steps {
-                dir("${FRONTEND_DIR}") {
+                script {
+                    def frontendPath = "${env.WORKSPACE}/${FRONTEND_DIR}"
                     sh """
-                docker build \
-                    -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG} \
-                    -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-latest \
-                    .
-            """
+                        docker build \
+                            -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG} \
+                            -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-latest \
+                            ${frontendPath}
+                    """
                 }
             }
         }
