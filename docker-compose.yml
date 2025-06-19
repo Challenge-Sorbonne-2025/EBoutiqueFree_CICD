@@ -32,7 +32,7 @@ services:
       context: ./frontendboutique
     container_name: ecommerce_frontend
     depends_on:
-      - backendboutique
+      - backend
     ports:
       - "3000:80"
 
