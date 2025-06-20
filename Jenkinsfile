@@ -75,11 +75,11 @@ pipeline {
 
         stage('🚀 Deploy to GKE') {
             steps {
-                withCredentials([file(credentialsId: 'GCP_SA_KEY', variable: 'GCP_KEY_FILE')]) {
+                withCredentials([file(credentialsId: 'GCP_PROJECT_ID', variable: 'GCP_KEY_FILE')]) {
                     sh """
                         echo "🔐 Auth to Google Cloud..."
                         gcloud auth activate-service-account --key-file=$GCP_KEY_FILE
-                        gcloud config set project ${GCP_PROJECT_ID}
+                        gcloud config set project ${ebooutique-ap}
                         gcloud container clusters get-credentials cluster-boutique --zone europe-west1
 
                         echo "🚀 Deploying backend..."
