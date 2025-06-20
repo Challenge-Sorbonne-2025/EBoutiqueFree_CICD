@@ -1,5 +1,6 @@
 def BACKEND_DIR = 'backendboutique'
 def FRONTEND_DIR = 'frontendboutique'
+def EBOUTIQUE_GCP_PROJECT_ID ="eboutique-ap"
 
 pipeline {
     agent any
@@ -79,7 +80,7 @@ pipeline {
                     sh """
                         echo "🔐 Auth to Google Cloud..."
                         gcloud auth activate-service-account --key-file=$GCP_KEY_FILE
-                        gcloud config set project ${eboutique-ap}
+                        gcloud config set project ${EBOUTIQUE_GCP_PROJECT_ID}
                         gcloud container clusters get-credentials cluster-boutique --zone europe-west1
 
                         echo "🚀 Deploying backend..."
