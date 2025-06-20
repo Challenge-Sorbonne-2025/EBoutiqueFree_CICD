@@ -9,7 +9,7 @@ pipeline {
         DOCKERHUB_CREDENTIALS_ID = 'DOCKER_HUB_CREDENTIALS'
         DOCKERHUB_USERNAME = 'senfidel'
         DOCKERHUB_REPO = 'projetsvde'
-        GCP_PROJECT_ID = 'eboutique-ap'
+        GCP_PROJECT_ID = 'ebooutique-ap'
     }
 
     stages {
