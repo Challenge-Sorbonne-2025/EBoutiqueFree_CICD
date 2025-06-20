@@ -80,6 +80,7 @@ pipeline {
                         echo "🔐 Auth to Google Cloud..."
 
                         export PATH="$HOME/google-cloud-sdk/bin:$PATH"
+                        export USE_GKE_GCLOUD_AUTH_PLUGIN=True
 
                         gcloud auth activate-service-account --key-file=$GCP_KEY_FILE
                         gcloud config set project ebooutique-ap
