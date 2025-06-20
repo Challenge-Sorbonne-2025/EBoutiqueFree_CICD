@@ -9,7 +9,7 @@ pipeline {
         DOCKERHUB_CREDENTIALS_ID = 'DOCKER_HUB_CREDENTIALS'
         DOCKERHUB_USERNAME = 'senfidel'
         DOCKERHUB_REPO = 'projetsvde'
-        GCP_PROJECT_ID = 'GCP_PROJECT_ID' # ID du json GCP dans jenkins
+        GCP_PROJECT_ID = 'GCP_PROJECT_ID' 
     }
 
     stages {
@@ -82,7 +82,7 @@ pipeline {
                         export PATH="$HOME/google-cloud-sdk/bin:$PATH"
 
                         gcloud auth activate-service-account --key-file=$GCP_KEY_FILE
-                        gcloud config set project ebooutique-ap # ID du projet boutique dans GCP
+                        gcloud config set project ebooutique-ap
                         gcloud container clusters get-credentials cluster-boutique --zone europe-west1
 
                         echo "🚀 Déploiement backend..."
