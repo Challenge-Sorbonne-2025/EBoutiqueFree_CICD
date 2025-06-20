@@ -75,7 +75,7 @@ pipeline {
 
         stage('🚀 Deploy to GKE') {
             steps {
-                withCredentials([file(credentialsId: 'GCP_SA_KEY', variable: 'GCP_KEY_FILE')]) {
+                withCredentials([file(credentialsId: 'GCP_PROJECT_ID', variable: 'GCP_KEY_FILE')]) {
                     sh '''
                         echo "🔐 Auth to Google Cloud..."
 
