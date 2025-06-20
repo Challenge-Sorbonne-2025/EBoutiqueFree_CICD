@@ -1,6 +1,5 @@
 def BACKEND_DIR = 'backendboutique'
 def FRONTEND_DIR = 'frontendboutique'
-def EBOUTIQUE_GCP_PROJECT_ID ="eboutique-ap"
 
 pipeline {
     agent any
@@ -10,7 +9,7 @@ pipeline {
         DOCKERHUB_CREDENTIALS_ID = 'DOCKER_HUB_CREDENTIALS'
         DOCKERHUB_USERNAME = 'senfidel'
         DOCKERHUB_REPO = 'projetsvde'
-        GCP_PROJECT_ID = 'ton-projet-gcp-id'  // 🔁 À personnaliser
+        GCP_PROJECT_ID = 'eboutique-ap'
     }
 
     stages {
@@ -75,24 +74,23 @@ pipeline {
         }
 
         stage('🚀 Deploy to GKE') {
-             withCredentials([file(credentialsId: 'GCP_SA_KEY', variable: 'GCP_KEY_FILE')]) {
-                sh '''
-                    echo "🔐 Auth to Google Cloud..."
-    
-                    # S'assurer que gcloud est dans le PATH
-                    export PATH="$HOME/google-cloud-sdk/bin:$PATH"
-    
-                    # Authentification
-                    gcloud auth activate-service-account --key-file=$GCP_KEY_FILE
-                    gcloud config set project eboutique-ap
-                    gcloud container clusters get-credentials cluster-boutique --zone europe-west1
-    
-                    echo "🚀 Deploying backend..."
-                    kubectl set image deployment/backend-deployment backend=docker.io/senfidel/projetsvde:backendboutique-$IMAGE_TAG || kubectl apply -f kubernetes/backend-deployment.yaml
-    
-                    echo "🚀 Deploying frontend..."
-                    kubectl set image deployment/frontend-deployment frontend=docker.io/senfidel/projetsvde:frontendboutique-$IMAGE_TAG || kubectl apply -f kubernetes/frontend-deployment.yaml
-                    """
+            steps {
+                withCredentials([file(credentialsId: 'GCP_SA_KEY', variable: 'GCP_KEY_FILE')]) {
+                    sh '''
+                        echo "🔐 Auth to Google Cloud..."
+
+                        export PATH="$HOME/google-cloud-sdk/bin:$PATH"
+
+                        gcloud auth activate-service-account --key-file=$GCP_KEY_FILE
+                        gcloud config set project eboutique-ap
+                        gcloud container clusters get-credentials cluster-boutique --zone europe-west1
+
+                        echo "🚀 Déploiement backend..."
+                        kubectl set image deployment/backend-deployment backend=docker.io/senfidel/projetsvde:backendboutique-$IMAGE_TAG || kubectl apply -f kubernetes/backend-deployment.yaml
+
+                        echo "🚀 Déploiement frontend..."
+                        kubectl set image deployment/frontend-deployment frontend=docker.io/senfidel/projetsvde:frontendboutique-$IMAGE_TAG || kubectl apply -f kubernetes/frontend-deployment.yaml
+                    '''
                 }
             }
         }
