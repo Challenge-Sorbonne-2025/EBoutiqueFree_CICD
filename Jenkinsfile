@@ -79,7 +79,7 @@ pipeline {
                     sh """
                         echo "🔐 Auth to Google Cloud..."
                         gcloud auth activate-service-account --key-file=$GCP_KEY_FILE
-                        gcloud config set project ${ebooutique-ap}
+                        gcloud config set project ${eboutique-ap}
                         gcloud container clusters get-credentials cluster-boutique --zone europe-west1
 
                         echo "🚀 Deploying backend..."
