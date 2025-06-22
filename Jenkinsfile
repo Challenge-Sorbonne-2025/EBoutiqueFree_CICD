@@ -78,8 +78,6 @@ pipeline {
                 withCredentials([file(credentialsId: 'GCP_PROJECT_ID', variable: 'GCP_KEY_FILE')]) {
                     sh '''
                         echo "🔐 Auth to Google Cloud..."
-
-
                         
                         # Préparer gcloud + plugin GKE
                         export PATH="$HOME/google-cloud-sdk/bin:$PATH"
