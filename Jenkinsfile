@@ -79,18 +79,23 @@ pipeline {
                     sh '''
                         echo "🔐 Auth to Google Cloud..."
 
+
+                        
+                        # Préparer gcloud + plugin GKE
                         export PATH="$HOME/google-cloud-sdk/bin:$PATH"
                         export USE_GKE_GCLOUD_AUTH_PLUGIN=True
-                        gcloud auth activate-service-account --key-file=$GCP_KEY_FILE
                         export GOOGLE_APPLICATION_CREDENTIALS=$GCP_KEY_FILE
+
+                        gcloud auth activate-service-account --key-file=$GCP_KEY_FILE
                         gcloud config set project ebooutique-ap
                         gcloud container clusters get-credentials cluster-boutique --zone europe-west1
 
                         echo "🚀 Déploiement backend..."
-                        kubectl set image deployment/backend-deployment backend=docker.io/senfidel/projetsvde:backendboutique-$IMAGE_TAG || kubectl apply -f kubernetes/backend-deployment.yaml
+                        kubectl set image deployment/backend-deployment backend=docker.io/senfidel/projetsvde:backendboutique-latest || kubectl apply -f kubernetes/backend-deployment.yaml
 
                         echo "🚀 Déploiement frontend..."
-                        kubectl set image deployment/frontend-deployment frontend=docker.io/senfidel/projetsvde:frontendboutique-$IMAGE_TAG || kubectl apply -f kubernetes/frontend-deployment.yaml
+                        kubectl set image deployment/frontend-deployment frontend=docker.io/senfidel/projetsvde:frontendboutique-latest || kubectl apply -f kubernetes/frontend-deployment.yaml
+
                     '''
                 }
             }
