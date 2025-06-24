@@ -36,13 +36,13 @@ pipeline {
                 }
             }
         }
-
+// --platform linux/amd64,linux/arm64 \
         stage('🐳 Build & Push Backend Docker Image') {
             steps {
                 sh """
                     docker buildx create --use || true
                     docker buildx build \
-                      --platform linux/amd64,linux/arm64 \
+                      --platform linux/amd64
                       -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-latest \
                       -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:backendboutique-${IMAGE_TAG} \
                       --push \
@@ -50,13 +50,13 @@ pipeline {
                 """
             }
         }
-
+// --platform linux/amd64,linux/arm64 \
         stage('🐳 Build & Push Frontend Docker Image') {
             steps {
                 sh """
                     docker buildx create --use || true
                     docker buildx build \
-                      --platform linux/amd64,linux/arm64 \
+                      --platform linux/amd64
                       -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-latest \
                       -t ${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}:frontendboutique-${IMAGE_TAG} \
                       --push \
