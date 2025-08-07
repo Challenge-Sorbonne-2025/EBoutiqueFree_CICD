@@ -1,5 +1,4 @@
-![Python](https://img.shields.io/badge/Python-3.8%2B-blue) ![Python](https://img.shields.io/badge/Jenkins-3.8%2B-yelow) 
-![Jenkins](https://img.shields.io/jenkins) 
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue) ![Python](https://img.shields.io/badge/Jenkins-3.8%2B-yellow)
 
 
 
