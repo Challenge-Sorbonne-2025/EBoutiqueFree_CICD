@@ -1,8 +1,7 @@
+# dépot pour CICD de l'application Free's Shops 
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue) ![ReactJS](https://img.shields.io/badge/ReactJS-18.1%2B-red) ![Postgres](https://img.shields.io/badge/Postgres-16%2B-gray) ![Jenkins](https://img.shields.io/badge/Jenkins-2.5%2B-yellow) ![Docker](https://img.shields.io/badge/Docker-28.1%2B-green)
 
 
-
-# EBoutiqueFree_CICD
 
 ## 📦 Description
 
