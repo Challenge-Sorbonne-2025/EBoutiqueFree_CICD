@@ -1,3 +1,4 @@
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue) ![ML](https://img.shields.io/badge/Machine%20Learning-Sklearn-green) ![Status](https://img.shields.io/badge/Status-En%20cours-orange)  
 # EBoutiqueFree_CICD
 
 ## 📦 Description
